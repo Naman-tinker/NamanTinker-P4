@@ -1,365 +1,1768 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ABC Online Book Store</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-            line-height: 1.6;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 55px 20px 45px;
-            text-align: center;
-        }
-
-        .header .logo {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 15px;
-            border-radius: 20px;
-            background: rgba(255,255,255,.18);
-            display: grid;
-            place-items: center;
-            font-size: 36px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15);
-        }
-
-        .header h1 {
-            font-size: clamp(2rem, 5vw, 3.3rem);
-            letter-spacing: .5px;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            font-size: 1.05rem;
-            opacity: .9;
-        }
-
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: rgba(255,255,255,.96);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 3px 15px rgba(15,23,42,.08);
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 13px 15px;
-        }
-
-        nav a {
-            color: #374151;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 9px 15px;
-            border-radius: 999px;
-            transition: .25s ease;
-        }
-
-        nav a:hover {
-            background: #ede9fe;
-            color: #5b21b6;
-            transform: translateY(-1px);
-        }
-
-        .container {
-            width: min(1100px, 92%);
-            margin: 42px auto;
-        }
-
-        .hero {
-            background: white;
-            border-radius: 24px;
-            padding: clamp(28px, 5vw, 55px);
-            box-shadow: 0 15px 45px rgba(15,23,42,.08);
-            border: 1px solid #e5e7eb;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::after {
-            content: "📚";
-            position: absolute;
-            right: 35px;
-            top: 25px;
-            font-size: 100px;
-            opacity: .07;
-        }
-
-        h2 {
-            color: #312e81;
-            font-size: 1.65rem;
-            margin-bottom: 12px;
-        }
-
-        .hero p {
-            max-width: 720px;
-            color: #6b7280;
-            font-size: 1.05rem;
-        }
-
-        section {
-            margin-top: 38px;
-        }
-
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 14px;
-            margin-top: 20px;
-        }
-
-        .category {
-            background: white;
-            padding: 22px 15px;
-            border-radius: 16px;
-            text-align: center;
-            font-weight: 700;
-            color: #4338ca;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 7px 22px rgba(15,23,42,.05);
-            transition: .25s ease;
-        }
-
-        .category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 14px 28px rgba(79,70,229,.15);
-            border-color: #c4b5fd;
-        }
-
-        .category span {
-            display: block;
-            font-size: 30px;
-            margin-bottom: 8px;
-        }
-
-        .books-wrapper {
-            overflow-x: auto;
-            margin-top: 20px;
-            border-radius: 18px;
-            box-shadow: 0 10px 30px rgba(15,23,42,.07);
-        }
-
-        table {
-            width: 100%;
-            min-width: 620px;
-            border-collapse: collapse;
-            background: white;
-            overflow: hidden;
-        }
-
-        th {
-            background: #312e81;
-            color: white;
-            padding: 17px;
-            text-align: left;
-            font-size: .95rem;
-        }
-
-        td {
-            padding: 17px;
-            border-bottom: 1px solid #eef0f4;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr {
-            transition: .2s ease;
-        }
-
-        tbody tr:hover {
-            background: #f5f3ff;
-        }
-
-        td:last-child {
-            color: #5b21b6;
-            font-weight: 800;
-        }
-
-        .offer {
-            margin-top: 40px;
-            padding: 28px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #fff7ed, #fef3c7);
-            border: 1px solid #fde68a;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .offer h2 {
-            color: #92400e;
-        }
-
-        .offer p {
-            color: #78350f;
-        }
-
-        .offer-badge {
-            background: #f59e0b;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 800;
-            padding: 16px 22px;
-            border-radius: 15px;
-            white-space: nowrap;
-            box-shadow: 0 8px 20px rgba(245,158,11,.25);
-        }
-
-        footer {
-            margin-top: 60px;
-            padding: 28px 20px;
-            text-align: center;
-            background: #111827;
-            color: #d1d5db;
-        }
-
-        footer strong {
-            color: white;
-        }
-
-        @media (max-width: 800px) {
-            .category-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .offer {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .category-grid {
-                grid-template-columns: 1fr;
-            }
-
-            nav {
-                gap: 3px;
-            }
-
-            nav a {
-                padding: 8px 10px;
-                font-size: .9rem;
-            }
-
-            .hero::after {
-                display: none;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <header class="header">
-        <div class="logo">📚</div>
-        <h1>ABC Online Book Store</h1>
-        <p>Your Online Destination for Books</p>
-    </header>
-
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#books">Books</a>
-        <a href="#categories">Categories</a>
-        <a href="#offers">Offers</a>
-        <a href="#contact">Contact Us</a>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="#30263d" name="theme-color"/>
+  <title>
+   Chapter &amp; Co. | ABC Online Book Store
+  </title>
+  <style>
+:root {
+    --plum: #30263d;
+    --plum-soft: #51445e;
+    --coral: #d9785d;
+    --coral-dark: #b95d48;
+    --cream: #f7f3ed;
+    --paper: #fffdfa;
+    --sage: #a8b5a0;
+    --ink: #292633;
+    --muted: #77727d;
+    --line: #e9e2dc;
+    --shadow: 0 14px 36px rgba(48,38,61,.09);
+}
+* {
+    box-sizing: border-box;
+}
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 82px;
+}
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Inter,"Segoe UI",Arial,sans-serif;
+    line-height: 1.6;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+button,input,textarea {
+    font: inherit;
+}
+.container {
+    width: min(1160px,calc(100% - 44px));
+    margin: auto;
+}
+.announcement {
+    background: var(--plum);
+    color: #f6eee7;
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 10px;
+    letter-spacing: .16em;
+    font-weight: 700;
+}
+header {
+    height: 78px;
+    background: rgba(255,253,250,.97);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+}
+.navbar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--plum);
+    font: 700 19px Georgia,serif;
+    white-space: nowrap;
+}
+.brand-mark {
+    width: 41px;
+    height: 41px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--coral);
+    color: white;
+    font: italic 23px Georgia,serif;
+}
+.brand small {
+    display: block;
+    color: var(--muted);
+    font: 700 8px Arial,sans-serif;
+    letter-spacing: .2em;
+    margin-top: 3px;
+}
+.navlinks {
+    display: flex;
+    align-items: center;
+    gap: 27px;
+}
+.navlinks a {
+    font-size: 12px;
+    font-weight: 700;
+    color: #5d5662;
+    transition: color .2s;
+}
+.navlinks a:hover,.navlinks a.active {
+    color: var(--coral-dark);
+}
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.cart-btn {
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--plum);
+    padding: 9px 13px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.cart-count {
+    display: inline-grid;
+    place-items: center;
+    background: var(--coral);
+    color: #fff;
+    border-radius: 50%;
+    min-width: 19px;
+    height: 19px;
+    margin-left: 5px;
+    font-size: 10px;
+}
+.menu-btn {
+    display: none;
+    border: 0;
+    background: none;
+    font-size: 25px;
+    color: var(--plum);
+    cursor: pointer;
+}
+/* Homepage hero */ .hero {
+    background: linear-gradient(90deg,rgba(35,27,45,.88),rgba(35,27,45,.68) 52%,rgba(35,27,45,.30)),url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2000&q=90") center/cover no-repeat;
+    color: #fff;
+}
+.hero-inner {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    padding: 76px 0;
+}
+.hero-copy {
+    max-width: 650px;
+}
+.eyebrow {
+    color: #f0b49e;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: .22em;
+}
+.hero h1 {
+    font: 500 clamp(42px,6vw,69px)/1.06 Georgia,serif;
+    letter-spacing: -.035em;
+    margin: 19px 0;
+}
+.hero h1 em {
+    font-style: italic;
+    color: #f0b49e;
+}
+.hero p {
+    max-width: 555px;
+    color: #f0e9e5;
+    font-size: 15px;
+    margin: 0 0 30px;
+}
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--coral);
+    color: white;
+    padding: 12px 21px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .05em;
+    border: 1px solid var(--coral);
+    cursor: pointer;
+    transition: .2s;
+}
+.primary-btn:hover {
+    background: var(--coral-dark);
+    border-color: var(--coral-dark);
+    transform: translateY(-2px);
+}
+.secondary-btn {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 12px 18px;
+    border: 1px solid #ffffff9c;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 750;
+}
+.secondary-btn:hover {
+    background: #ffffff18;
+}
+.promise {
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+}
+.promise-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    padding: 17px 0;
+}
+.promise-item {
+    text-align: center;
+    color: #655d68;
+    font-size: 11px;
+    font-weight: 700;
+    border-right: 1px solid #e2d9d1;
+}
+.promise-item:last-child {
+    border: 0;
+}
+.promise-item span {
+    color: var(--coral-dark);
+    margin-right: 7px;
+}
+/* Common sections */ .section {
+    padding: 76px 0;
+}
+.section-heading {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 34px;
+}
+.kicker {
+    font-size: 10px;
+    color: var(--coral-dark);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    font-weight: 850;
+}
+h2 {
+    font: 500 clamp(30px,4vw,42px)/1.2 Georgia,serif;
+    color: var(--plum);
+    margin: 10px 0;
+}
+.section-heading p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+}
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 13px;
+}
+.category {
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 5px;
+    padding: 19px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+    color: var(--plum);
+}
+.category:hover,.category.selected {
+    border-color: var(--coral);
+    background: #fff6f2;
+    transform: translateY(-3px);
+}
+.category-icon {
+    display: block;
+    font: 25px Georgia,serif;
+    color: var(--coral);
+    margin-bottom: 6px;
+}
+.category strong {
+    font-size: 11px;
+}
+/* Book catalogue */ .catalogue {
+    background: var(--cream);
+}
+.catalogue .section {
+    padding-top: 74px;
+}
+.catalogue-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 23px;
+}
+.filters {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+.filter {
+    border: 1px solid #ded6ce;
+    background: #fff;
+    color: #5e5662;
+    padding: 8px 12px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.filter.active,.filter:hover {
+    background: var(--plum);
+    color: white;
+    border-color: var(--plum);
+}
+.search {
+    position: relative;
+    min-width: 250px;
+}
+.search input {
+    width: 100%;
+    border: 1px solid #e2dad2;
+    background: #fff;
+    padding: 10px 13px 10px 34px;
+    border-radius: 30px;
+    font-size: 11px;
+    outline: none;
+}
+.search input:focus {
+    border-color: var(--coral);
+}
+.search span {
+    position: absolute;
+    left: 13px;
+    top: 6px;
+    color: #8b8490;
+    font-size: 17px;
+}
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 17px;
+}
+.book-card {
+    background: #fff;
+    border: 1px solid #ece5df;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    transition: transform .2s,box-shadow .2s;
+}
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+.book-art {
+    height: 190px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    background: #e8e2dc;
+}
+.book-cover {
+    height: 155px;
+    width: 112px;
+    padding: 13px 12px;
+    box-shadow: 7px 9px 16px #211b2c35;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+    position: relative;
+}
+.book-cover:after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #ffffff45;
+}
+.book-cover b {
+    font: 17px/1.08 Georgia,serif;
+    position: relative;
+    z-index: 1;
+}
+.book-cover small {
+    font: 7px/1.3 Arial,sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+.cover-atomic {
+    background: linear-gradient(145deg,#6d8271,#293f3b);
+}
+.cover-alchemist {
+    background: linear-gradient(145deg,#c18b48,#71472d);
+}
+.cover-psychology {
+    background: linear-gradient(145deg,#405b73,#1f3045);
+}
+.cover-ikigai {
+    background: linear-gradient(145deg,#d17e68,#8d4948);
+}
+.cover-harry {
+    background: linear-gradient(145deg,#6a5c87,#312744);
+}
+.cover-hobbit {
+    background: linear-gradient(145deg,#9d794d,#51412d);
+}
+.cover-pride {
+    background: linear-gradient(145deg,#a56f83,#573b53);
+}
+.cover-1984 {
+    background: linear-gradient(145deg,#8d4547,#3d222a);
+}
+.cover-wings {
+    background: linear-gradient(145deg,#547f87,#263f50);
+}
+.cover-rich {
+    background: linear-gradient(145deg,#a77a3e,#51402b);
+}
+.cover-gatsby {
+    background: linear-gradient(145deg,#3f7776,#1d3c40);
+}
+.cover-think {
+    background: linear-gradient(145deg,#b27b4d,#60402d);
+}
+.book-info {
+    padding: 15px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.book-tag {
+    font-size: 8px;
+    color: var(--coral-dark);
+    font-weight: 850;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+.book-info h3 {
+    font: 18px/1.18 Georgia,serif;
+    color: var(--plum);
+    margin: 7px 0 4px;
+}
+.author {
+    font-size: 10px;
+    color: var(--muted);
+}
+.book-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+}
+.price {
+    font-size: 15px;
+    color: var(--plum);
+    font-weight: 850;
+}
+.add-btn {
+    border: 1px solid var(--plum);
+    background: white;
+    color: var(--plum);
+    padding: 7px 9px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 850;
+    cursor: pointer;
+}
+.add-btn:hover {
+    background: var(--plum);
+    color: white;
+}
+.no-results {
+    display: none;
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 13px;
+}
+/* Offer, contact, footer */ .offer {
+    background: #e8eee6;
+    border: 1px solid #dbe4d8;
+    padding: 34px 38px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.offer h2 {
+    font-size: 32px;
+    margin: 8px 0;
+}
+.offer p {
+    font-size: 12px;
+    color: #6c756b;
+    margin: 0;
+}
+.offer .primary-btn {
+    flex-shrink: 0;
+}
+.contact-section {
+    background: #f8f5f1;
+}
+.contact-grid {
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    gap: 22px;
+}
+.contact-panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 27px;
+    border-radius: 6px;
+}
+.contact-panel h3 {
+    font: 23px Georgia,serif;
+    color: var(--plum);
+    margin: 0 0 8px;
+}
+.contact-panel p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 19px;
+}
+.contact-line {
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+}
+.contact-line small {
+    display: block;
+    color: #938b93;
+    font-size: 9px;
+    font-weight: 850;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+.contact-line a,.contact-line span {
+    font-size: 12px;
+    color: var(--plum);
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+.field {
+    margin-bottom: 12px;
+}
+.field label {
+    display: block;
+    font-size: 9px;
+    font-weight: 850;
+    color: #625a67;
+    margin-bottom: 5px;
+}
+.field input,.field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-size: 11px;
+    outline: none;
+}
+.field input:focus,.field textarea:focus {
+    border-color: var(--coral);
+}
+.field textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+footer {
+    background: var(--plum);
+    color: #e5dfe7;
+    padding: 22px 0;
+    font-size: 10px;
+}
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+footer strong {
+    color: #fff;
+}
+.toast {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    background: var(--plum);
+    color: white;
+    padding: 12px 17px;
+    border-radius: 5px;
+    font-size: 11px;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: .2s;
+    z-index: 200;
+    pointer-events: none;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.cart-modal {
+    position: fixed;
+    inset: 0;
+    background: #211a2a88;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    z-index: 300;
+}
+.cart-modal.open {
+    display: flex;
+}
+.cart-box {
+    background: #fffdfa;
+    width: min(480px,100%);
+    max-height: 80vh;
+    overflow: auto;
+    border-radius: 7px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+.cart-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+}
+.cart-head h3 {
+    font: 24px Georgia,serif;
+    color: var(--plum);
+    margin: 0;
+}
+.close-cart {
+    border: 0;
+    background: none;
+    font-size: 23px;
+    cursor: pointer;
+    color: var(--plum);
+}
+.cart-items {
+    padding: 10px 0;
+}
+.cart-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+}
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 850;
+    color: var(--plum);
+    padding: 15px 0;
+}
+.empty-cart {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 24px 0;
+}
+@media(max-width:950px) {
+    .navlinks {
+    gap: 15px;
+    }
+    .book-grid {
+    grid-template-columns: repeat(3,1fr);
+    }
+}
+@media(max-width:700px) {
+    .container {
+    width: calc(100% - 34px);
+    }
+    header {
+    height: 68px;
+    }
+    .navbar {
+    height: 68px;
+    }
+    .menu-btn {
+    display: block;
+    margin-left: auto;
+    }
+    .navlinks {
+    display: none;
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    background: #fffdfa;
+    padding: 12px 20px 18px;
+    box-shadow: 0 12px 20px #30263d18;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    }
+    .navlinks.open {
+    display: flex;
+    }
+    .navlinks a {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+    }
+    .hero-inner {
+    min-height: 430px;
+    padding: 58px 0;
+    }
+    .hero h1 {
+    font-size: 46px;
+    }
+    .hero p {
+    font-size: 13px;
+    }
+    .promise-row {
+    grid-template-columns: 1fr;
+    padding: 8px 0;
+    }
+    .promise-item {
+    padding: 8px;
+    border-right: 0;
+    border-bottom: 1px solid #e2d9d1;
+    }
+    .promise-item:last-child {
+    border: 0;
+    }
+    .section {
+    padding: 55px 0;
+    }
+    .category-grid {
+    grid-template-columns: repeat(2,1fr);
+    }
+    .book-grid {
+    grid-template-columns: repeat(2,1fr);
+    }
+    .book-art {
+    height: 160px;
+    }
+    .book-cover {
+    transform: scale(.9);
+    }
+    .offer {
+    padding: 26px;
+    align-items: flex-start;
+    flex-direction: column;
+    }
+    .offer h2 {
+    font-size: 28px;
+    }
+    .contact-grid {
+    grid-template-columns: 1fr;
+    }
+}
+@media(max-width:430px) {
+    .brand {
+    font-size: 15px;
+    }
+    .brand-mark {
+    width: 36px;
+    height: 36px;
+    }
+    .nav-right {
+    gap: 4px;
+    }
+    .cart-btn {
+    padding: 8px 9px;
+    font-size: 10px;
+    }
+    .hero h1 {
+    font-size: 39px;
+    }
+    .secondary-btn {
+    margin: 12px 0 0;
+    }
+    .catalogue-tools {
+    align-items: stretch;
+    }
+    .search {
+    width: 100%;
+    }
+    .book-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    }
+    .book-info {
+    padding: 12px;
+    }
+    .book-info h3 {
+    font-size: 16px;
+    }
+    .book-art {
+    height: 145px;
+    }
+    .book-cover {
+    transform: scale(.82);
+    }
+    .book-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    }
+    .add-btn {
+    width: 100%;
+    }
+    .cart-btn {
+    font-size: 0;
+    }
+    .cart-btn .cart-count {
+    font-size: 10px;
+    margin: 0;
+    }
+}
+</style>
+ </head>
+ <body>
+  <div class="announcement">
+   A GOOD BOOK CAN TAKE YOU ANYWHERE   ·   FIND YOUR NEXT FAVOURITE READ
+  </div>
+  <header>
+   <div class="container navbar">
+    <a class="brand" href="#home">
+     <span class="brand-mark">
+      C
+     </span>
+     <span>
+      CHAPTER &amp; CO.
+      <small>
+       ABC ONLINE BOOK STORE
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-btn" onclick="toggleMenu()">
+     ☰
+    </button>
+    <nav class="navlinks" id="navlinks">
+     <a href="#home" onclick="closeMenu()">
+      Home
+     </a>
+     <a href="#categories" onclick="closeMenu()">
+      Categories
+     </a>
+     <a href="#books" onclick="closeMenu()">
+      Books
+     </a>
+     <a href="#offers" onclick="closeMenu()">
+      Offers
+     </a>
+     <a href="#contact" onclick="closeMenu()">
+      Contact
+     </a>
     </nav>
+    <div class="nav-right">
+     <button class="cart-btn" onclick="openCart()">
+      My Bag
+      <span class="cart-count" id="cartCount">
+       0
+      </span>
+     </button>
+    </div>
+   </div>
+  </header>
+  <main>
+   <section class="hero" id="home">
+    <div class="container hero-inner">
+     <div class="hero-copy">
+      <span class="eyebrow">
+       Welcome to ABC Online Book Store
+      </span>
+      <h1>
+       Stories to inspire.
+       <br/>
+       <em>
+        Ideas to stay.
+       </em>
+      </h1>
+      <p>
+       From timeless classics to today's bestsellers, discover books that spark curiosity, build knowledge and stay with you long after the final page.
+      </p>
+      <a class="primary-btn" href="#books">
+       EXPLORE THE COLLECTION  →
+      </a>
+      <a class="secondary-btn" href="#categories">
+       BROWSE CATEGORIES
+      </a>
+     </div>
+    </div>
+   </section>
+   <div class="promise">
+    <div class="container promise-row">
+     <div class="promise-item">
+      <span>
+       ✦
+      </span>
+      Carefully selected reads
+     </div>
+     <div class="promise-item">
+      <span>
+       ✦
+      </span>
+      Popular titles &amp; timeless classics
+     </div>
+     <div class="promise-item">
+      <span>
+       ✦
+      </span>
+      Special offers on selected books
+     </div>
+    </div>
+   </div>
+   <section class="section" id="categories">
+    <div class="container">
+     <div class="section-heading">
+      <span class="kicker">
+       Find your kind of story
+      </span>
+      <h2>
+       Browse by Category
+      </h2>
+      <p>
+       Explore a collection for every interest, ambition and imagination.
+      </p>
+     </div>
+     <div class="category-grid">
+      <button class="category" onclick="chooseCategory('Self-help')">
+       <span class="category-icon">
+        ✧
+       </span>
+       <strong>
+        Self-help
+       </strong>
+      </button>
+      <button class="category" onclick="chooseCategory('Fiction')">
+       <span class="category-icon">
+        ❧
+       </span>
+       <strong>
+        Fiction
+       </strong>
+      </button>
+      <button class="category" onclick="chooseCategory('Business')">
+       <span class="category-icon">
+        ▤
+       </span>
+       <strong>
+        Business
+       </strong>
+      </button>
+      <button class="category" onclick="chooseCategory('Technology')">
+       <span class="category-icon">
+        ⌘
+       </span>
+       <strong>
+        Technology
+       </strong>
+      </button>
+      <button class="category" onclick="chooseCategory('Classics')">
+       <span class="category-icon">
+        ❝
+       </span>
+       <strong>
+        Classics
+       </strong>
+      </button>
+     </div>
+    </div>
+   </section>
+   <section class="catalogue" id="books">
+    <div class="container section">
+     <div class="section-heading">
+      <span class="kicker">
+       The reader's bookshelf
+      </span>
+      <h2>
+       Popular Books
+      </h2>
+      <p>
+       Discover reader favourites and well-known titles across genres.
+      </p>
+     </div>
+     <div class="catalogue-tools">
+      <div class="filters">
+       <button class="filter active" data-filter="All" onclick="filterBooks('All',this)">
+        All Books
+       </button>
+       <button class="filter" data-filter="Self-help" onclick="filterBooks('Self-help',this)">
+        Self-help
+       </button>
+       <button class="filter" data-filter="Fiction" onclick="filterBooks('Fiction',this)">
+        Fiction
+       </button>
+       <button class="filter" data-filter="Business" onclick="filterBooks('Business',this)">
+        Business
+       </button>
+       <button class="filter" data-filter="Classics" onclick="filterBooks('Classics',this)">
+        Classics
+       </button>
+      </div>
+      <label class="search">
+       <span>
+        ⌕
+       </span>
+       <input id="searchInput" oninput="searchBooks()" placeholder="Search title or author..." type="search"/>
+      </label>
+     </div>
+     <div class="book-grid" id="bookGrid">
+      <article class="book-card" data-category="Self-help" data-name="Atomic Habits James Clear">
+       <div class="book-art">
+        <div class="book-cover cover-atomic">
+         <small>
+          James Clear
+         </small>
+         <b>
+          ATOMIC
+          <br/>
+          HABITS
+         </b>
+         <small>
+          An easy way to build good habits
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Self-help · Bestseller
+        </span>
+        <h3>
+         Atomic Habits
+        </h3>
+        <span class="author">
+         James Clear
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹499
+         </span>
+         <button class="add-btn" onclick="addToCart('Atomic Habits',499)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Fiction" data-name="The Alchemist Paulo Coelho">
+       <div class="book-art">
+        <div class="book-cover cover-alchemist">
+         <small>
+          Paulo Coelho
+         </small>
+         <b>
+          THE
+          <br/>
+          ALCHEMIST
+         </b>
+         <small>
+          A fable about following your dream
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Fiction · International favourite
+        </span>
+        <h3>
+         The Alchemist
+        </h3>
+        <span class="author">
+         Paulo Coelho
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹299
+         </span>
+         <button class="add-btn" onclick="addToCart('The Alchemist',299)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Business" data-name="The Psychology of Money Morgan Housel">
+       <div class="book-art">
+        <div class="book-cover cover-psychology">
+         <small>
+          Morgan Housel
+         </small>
+         <b>
+          THE
+          <br/>
+          PSYCHOLOGY
+          <br/>
+          OF MONEY
+         </b>
+         <small>
+          Timeless lessons on wealth
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Business · Finance
+        </span>
+        <h3>
+         The Psychology of Money
+        </h3>
+        <span class="author">
+         Morgan Housel
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹399
+         </span>
+         <button class="add-btn" onclick="addToCart('The Psychology of Money',399)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Self-help" data-name="Ikigai Hector Garcia Francesc Miralles">
+       <div class="book-art">
+        <div class="book-cover cover-ikigai">
+         <small>
+          Hector Garcia &amp; Francesc Miralles
+         </small>
+         <b>
+          IKIGAI
+         </b>
+         <small>
+          The Japanese secret to a long life
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Self-help · Lifestyle
+        </span>
+        <h3>
+         Ikigai
+        </h3>
+        <span class="author">
+         Hector Garcia &amp; Francesc Miralles
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹350
+         </span>
+         <button class="add-btn" onclick="addToCart('Ikigai',350)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Fiction" data-name="Harry Potter and the Philosopher's Stone J K Rowling">
+       <div class="book-art">
+        <div class="book-cover cover-harry">
+         <small>
+          J.K. Rowling
+         </small>
+         <b>
+          HARRY
+          <br/>
+          POTTER
+         </b>
+         <small>
+          And the Philosopher's Stone
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Fantasy · Fiction
+        </span>
+        <h3>
+         Harry Potter and the Philosopher's Stone
+        </h3>
+        <span class="author">
+         J.K. Rowling
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹450
+         </span>
+         <button class="add-btn" onclick="addToCart('Harry Potter and the Philosopher’s Stone',450)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Fiction" data-name="The Hobbit J R R Tolkien">
+       <div class="book-art">
+        <div class="book-cover cover-hobbit">
+         <small>
+          J.R.R. Tolkien
+         </small>
+         <b>
+          THE
+          <br/>
+          HOBBIT
+         </b>
+         <small>
+          There and back again
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Fantasy · Adventure
+        </span>
+        <h3>
+         The Hobbit
+        </h3>
+        <span class="author">
+         J.R.R. Tolkien
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹399
+         </span>
+         <button class="add-btn" onclick="addToCart('The Hobbit',399)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Classics" data-name="Pride and Prejudice Jane Austen">
+       <div class="book-art">
+        <div class="book-cover cover-pride">
+         <small>
+          Jane Austen
+         </small>
+         <b>
+          PRIDE &amp;
+          <br/>
+          PREJUDICE
+         </b>
+         <small>
+          A timeless classic
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Classic · Romance
+        </span>
+        <h3>
+         Pride and Prejudice
+        </h3>
+        <span class="author">
+         Jane Austen
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹249
+         </span>
+         <button class="add-btn" onclick="addToCart('Pride and Prejudice',249)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Classics" data-name="1984 George Orwell">
+       <div class="book-art">
+        <div class="book-cover cover-1984">
+         <small>
+          George Orwell
+         </small>
+         <b>
+          1984
+         </b>
+         <small>
+          Big Brother is watching
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Classic · Dystopian
+        </span>
+        <h3>
+         1984
+        </h3>
+        <span class="author">
+         George Orwell
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹275
+         </span>
+         <button class="add-btn" onclick="addToCart('1984',275)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Fiction" data-name="Wings of Fire A P J Abdul Kalam Arun Tiwari">
+       <div class="book-art">
+        <div class="book-cover cover-wings">
+         <small>
+          A.P.J. Abdul Kalam
+         </small>
+         <b>
+          WINGS
+          <br/>
+          OF FIRE
+         </b>
+         <small>
+          An autobiography
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Biography · Inspiration
+        </span>
+        <h3>
+         Wings of Fire
+        </h3>
+        <span class="author">
+         A.P.J. Abdul Kalam with Arun Tiwari
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹325
+         </span>
+         <button class="add-btn" onclick="addToCart('Wings of Fire',325)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Business" data-name="Rich Dad Poor Dad Robert Kiyosaki">
+       <div class="book-art">
+        <div class="book-cover cover-rich">
+         <small>
+          Robert T. Kiyosaki
+         </small>
+         <b>
+          RICH DAD
+          <br/>
+          POOR DAD
+         </b>
+         <small>
+          What the rich teach their kids
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Business · Personal finance
+        </span>
+        <h3>
+         Rich Dad Poor Dad
+        </h3>
+        <span class="author">
+         Robert T. Kiyosaki
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹399
+         </span>
+         <button class="add-btn" onclick="addToCart('Rich Dad Poor Dad',399)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Classics" data-name="The Great Gatsby F Scott Fitzgerald">
+       <div class="book-art">
+        <div class="book-cover cover-gatsby">
+         <small>
+          F. Scott Fitzgerald
+         </small>
+         <b>
+          THE GREAT
+          <br/>
+          GATSBY
+         </b>
+         <small>
+          A classic novel
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Classic · Literary fiction
+        </span>
+        <h3>
+         The Great Gatsby
+        </h3>
+        <span class="author">
+         F. Scott Fitzgerald
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹225
+         </span>
+         <button class="add-btn" onclick="addToCart('The Great Gatsby',225)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <article class="book-card" data-category="Self-help" data-name="Think and Grow Rich Napoleon Hill">
+       <div class="book-art">
+        <div class="book-cover cover-think">
+         <small>
+          Napoleon Hill
+         </small>
+         <b>
+          THINK &amp;
+          <br/>
+          GROW RICH
+         </b>
+         <small>
+          Personal achievement
+         </small>
+        </div>
+       </div>
+       <div class="book-info">
+        <span class="book-tag">
+         Self-help · Personal growth
+        </span>
+        <h3>
+         Think and Grow Rich
+        </h3>
+        <span class="author">
+         Napoleon Hill
+        </span>
+        <div class="book-meta">
+         <span class="price">
+          ₹299
+         </span>
+         <button class="add-btn" onclick="addToCart('Think and Grow Rich',299)">
+          ADD TO BAG +
+         </button>
+        </div>
+       </div>
+      </article>
+      <div class="no-results" id="noResults">
+       No books match your search. Try another title or category.
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="section" id="offers">
+    <div class="container">
+     <div class="offer">
+      <div>
+       <span class="kicker">
+        A treat for book lovers
+       </span>
+       <h2>
+        Make room for one more book.
+       </h2>
+       <p>
+        Enjoy 20% off selected books. Browse the collection to find your next read.
+       </p>
+      </div>
+      <a class="primary-btn" href="#books">
+       SHOP THE COLLECTION  →
+      </a>
+     </div>
+    </div>
+   </section>
+   <section class="contact-section" id="contact">
+    <div class="container section">
+     <div class="section-heading">
+      <span class="kicker">
+       Let's connect
+      </span>
+      <h2>
+       We're happy to help.
+      </h2>
+      <p>
+       Questions about a title, availability or an order? Get in touch with ABC Online Book Store.
+      </p>
+     </div>
+     <div class="contact-grid">
+      <div class="contact-panel">
+       <h3>
+        ABC Online Book Store
+       </h3>
+       <p>
+        Your online destination for books.
+       </p>
+       <div class="contact-line">
+        <small>
+         Email
+        </small>
+        <a href="mailto:abcbookstore@example.com">
+         abcbookstore@example.com
+        </a>
+       </div>
+       <div class="contact-line">
+        <small>
+         Phone
+        </small>
+        <a href="tel:+910000000000">
+         +91 00000 00000
+        </a>
+       </div>
+       <div class="contact-line">
+        <small>
+         Online store
+        </small>
+        <span>
+         Serving readers across India
+        </span>
+       </div>
+      </div>
+      <div class="contact-panel">
+       <h3>
+        Send us a message
+       </h3>
+       <p>
+        Fill in the form and tell us what you need.
+       </p>
+       <form onsubmit="event.preventDefault();showToast('Thank you! Your message has been received in this demo.');this.reset()">
+        <div class="field">
+         <label for="name">
+          YOUR NAME
+         </label>
+         <input id="name" placeholder="Enter your name" required=""/>
+        </div>
+        <div class="field">
+         <label for="email">
+          EMAIL ADDRESS
+         </label>
+         <input id="email" placeholder="Enter your email" required="" type="email"/>
+        </div>
+        <div class="field">
+         <label for="message">
+          MESSAGE
+         </label>
+         <textarea id="message" placeholder="How can we help?" required=""></textarea>
+        </div>
+        <button class="primary-btn" type="submit">
+         SEND MESSAGE  →
+        </button>
+       </form>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main>
+  <footer>
+   <div class="container footer-row">
+    <span>
+     © 2026
+     <strong>
+      ABC Online Book Store
+     </strong>
+     . All rights reserved.
+    </span>
+    <span>
+     Stories to inspire · Ideas to stay
+    </span>
+   </div>
+  </footer>
+  <div aria-live="polite" class="toast" id="toast" role="status">
+  </div>
+  <div class="cart-modal" id="cartModal" onclick="if(event.target===this)closeCart()">
+   <div class="cart-box">
+    <div class="cart-head">
+     <h3>
+      Your Book Bag
+     </h3>
+     <button aria-label="Close cart" class="close-cart" onclick="closeCart()">
+      ×
+     </button>
+    </div>
+    <div class="cart-items" id="cartItems">
+    </div>
+    <div class="cart-total">
+     <span>
+      Total
+     </span>
+     <span id="cartTotal">
+      ₹0
+     </span>
+    </div>
+    <button class="primary-btn" onclick="checkoutDemo()" style="width:100%">
+     CONTINUE
+    </button>
+   </div>
+  </div>
+  <script>
+let cart = [];
 
-    <main class="container">
+function toggleMenu() {
+    const n = document.getElementById('navlinks'),
+        b = document.querySelector('.menu-btn');
 
-        <section id="home" class="hero">
-            <h2>Welcome to ABC Online Book Store</h2>
-            <p>
-                Find books from different categories including technology,
-                programming, fiction, business and education.
-            </p>
-        </section>
+    n.classList.toggle('open');
+    b.setAttribute('aria-expanded', n.classList.contains('open'));
+}
 
-        <section id="categories">
-            <h2>Book Categories</h2>
+function closeMenu() {
+    document.getElementById('navlinks').classList.remove('open');
+    document.querySelector('.menu-btn').setAttribute('aria-expanded', 'false');
+}
 
-            <div class="category-grid">
-                <div class="category"><span>💻</span>Programming</div>
-                <div class="category"><span>🖥️</span>Computer Science</div>
-                <div class="category"><span>💼</span>Business</div>
-                <div class="category"><span>📖</span>Fiction</div>
-                <div class="category"><span>🎓</span>Competitive Exams</div>
-            </div>
-        </section>
+function filterBooks(category, btn) {
+    document.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
 
-        <section id="books">
-            <h2>Popular Books</h2>
+    if (btn) {
+        btn.classList.add('active');
+    }
 
-            <div class="books-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Book Name</th>
-                            <th>Author</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
+    document.querySelectorAll('.category').forEach(x =>
+        x.classList.toggle('selected', x.textContent.trim() === category)
+    );
 
-                    <tbody>
-                        <tr>
-                            <td>Python Programming</td>
-                            <td>John Smith</td>
-                            <td>₹450</td>
-                        </tr>
+    document.getElementById('searchInput').value = '';
+    applyFilters(category, '');
+}
 
-                        <tr>
-                            <td>Web Technology</td>
-                            <td>David Brown</td>
-                            <td>₹500</td>
-                        </tr>
+function chooseCategory(category) {
+    document.querySelectorAll('.filter').forEach(x =>
+        x.classList.toggle('active', x.dataset.filter === category)
+    );
 
-                        <tr>
-                            <td>Database Management</td>
-                            <td>Robert Lee</td>
-                            <td>₹550</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+    document.querySelectorAll('.category').forEach(x =>
+        x.classList.toggle('selected', x.textContent.trim() === category)
+    );
 
-        <section id="offers" class="offer">
-            <div>
-                <h2>Special Offer</h2>
-                <p>Get 20% discount on selected books.</p>
-            </div>
-            <div class="offer-badge">20% OFF</div>
-        </section>
+    document.getElementById('searchInput').value = '';
+    applyFilters(category, '');
 
-    </main>
+    document.getElementById('books').scrollIntoView({
+        behavior: 'smooth'
+    });
+}
 
-    <footer id="contact">
-        <p>© 2026 <strong>ABC Online Book Store</strong> · All Rights Reserved</p>
-    </footer>
+function searchBooks() {
+    document.querySelectorAll('.filter,.category').forEach(x =>
+        x.classList.remove('active', 'selected')
+    );
 
-</body>
+    applyFilters(
+        'All',
+        document.getElementById('searchInput').value.toLowerCase().trim()
+    );
+}
+
+function applyFilters(category, query) {
+    let count = 0;
+
+    document.querySelectorAll('.book-card').forEach(card => {
+        const categoryOK = category === 'All' || card.dataset.category === category;
+        const searchOK = card.dataset.name.toLowerCase().includes(query);
+        const show = categoryOK && searchOK;
+
+        card.style.display = show ? 'flex' : 'none';
+
+        if (show) {
+            count++;
+        }
+    });
+
+    document.getElementById('noResults').style.display = count ? 'none' : 'block';
+}
+
+function addToCart(name, price) {
+    cart.push({
+        name,
+        price
+    });
+
+    document.getElementById('cartCount').textContent = cart.length;
+    showToast(name + ' added to your bag');
+}
+
+function openCart() {
+    const list = document.getElementById('cartItems');
+    list.innerHTML = '';
+
+    if (!cart.length) {
+        list.innerHTML = '<div class="empty-cart">Your book bag is empty. Find a good read!</div>';
+    } else {
+        cart.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'cart-row';
+
+            row.innerHTML =
+                '<span>' + escapeHTML(item.name) + '</span>' +
+                '<span>₹' + item.price +
+                ' <button aria-label="Remove ' + escapeHTML(item.name) +
+                '" onclick="removeItem(' + index +
+                ')" style="border:0;background:none;color:#b95d48;cursor:pointer;margin-left:7px">×</button></span>';
+
+            list.appendChild(row);
+        });
+    }
+
+    document.getElementById('cartTotal').textContent =
+        '₹' + cart.reduce((sum, x) => sum + x.price, 0);
+
+    document.getElementById('cartModal').classList.add('open');
+}
+
+function closeCart() {
+    document.getElementById('cartModal').classList.remove('open');
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    document.getElementById('cartCount').textContent = cart.length;
+    openCart();
+}
+
+function checkoutDemo() {
+    if (!cart.length) {
+        showToast('Your bag is empty');
+        return;
+    }
+
+    showToast('Checkout is a demo and payment is not connected.');
+}
+
+function escapeHTML(value) {
+    return value.replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[c]));
+}
+
+let toastTimer;
+
+function showToast(message) {
+    const t = document.getElementById('toast');
+
+    t.textContent = message;
+    t.classList.add('show');
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+ </body>
 </html>
